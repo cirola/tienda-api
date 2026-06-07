@@ -1,0 +1,30 @@
+# Entorno
+.env
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Base de datos local
+*.db
+*.sqlite
+*.sqlite3
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editores
+.vscode/
+.idea/
+*.swp
+.DS_Store
