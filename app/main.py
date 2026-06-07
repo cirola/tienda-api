@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.docs import get_redoc_html
 from slowapi.errors import RateLimitExceeded
 
 from app.config import settings
@@ -49,7 +50,20 @@ app = FastAPI(
         "productos con paginación, filtros y búsqueda."
     ),
     lifespan=lifespan,
+    # Desactivamos el /redoc por defecto: usa redoc@next (beta) que suele
+    # renderizar en blanco. Más abajo lo servimos con una versión fija estable.
+    redoc_url=None,
 )
+
+
+@app.get("/redoc", include_in_schema=False)
+def redoc_html():
+    """ReDoc apuntando a una versión estable del CDN (en vez de @next)."""
+    return get_redoc_html(
+        openapi_url=app.openapi_url,
+        title=f"{app.title} - ReDoc",
+        redoc_js_url="https://cdn.jsdelivr.net/npm/redoc@2/bundles/redoc.standalone.js",
+    )
 
 # --- Rate limiting ---
 # El limiter se guarda en app.state y registramos el handler de 429.
